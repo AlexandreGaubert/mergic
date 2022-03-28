@@ -22,11 +22,13 @@ export default function PullRequestsList() {
                 style={{ gridArea: 'search' }}
             />
             <section id='pr-list'>
-                <PullRequestFamily
-                    important
-                    tag={'You should review this first :'}
-                    pullRequests={nextPullRequest ? [nextPullRequest] : []}
-                />
+                {nextPullRequest &&
+                    <PullRequestFamily
+                        important
+                        tag={'You should review this first :'}
+                        pullRequests={nextPullRequest ? [nextPullRequest] : []}
+                    />
+                }
                 {Object.keys(groupedPullRequests).map((tag, index) =>
                     <PullRequestFamily
                         key={'pr-family-' + index}

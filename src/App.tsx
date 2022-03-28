@@ -6,13 +6,21 @@ import PullRequestsList from './pages/pull-requests-list/PullRequestsList';
 import './App.scss';
 
 function App() {
-  const { loading, repoUrl, onResetRepo } = useContext(PullRequestContext);
+  const { loading, repoUrl, onResetRepo, pullRequests } = useContext(PullRequestContext);
+
+  const noOpenedPullRequests = !loading && repoUrl && pullRequests.length === 0
 
   if (!repoUrl) return <ProvideRepoScreen />
 
   return (
     <div className="App">
-      {loading ? <LoaderScreen /> : <PullRequestsList />}
+      {noOpenedPullRequests &&
+        <div id='no-pr-screen'>
+          This repository don't have any opened pull requests yet.
+        </div>
+      }
+      {loading && <LoaderScreen />}
+      {!loading && !noOpenedPullRequests && <PullRequestsList />}
       {!loading &&
         <div id='reset-repo-btn' onClick={onResetRepo}>
           <i className='fa fa-times' />
