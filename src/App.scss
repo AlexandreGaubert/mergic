@@ -1,0 +1,23 @@
+#reset-repo-btn {
+    position: absolute;
+    color: white;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    line-height: 0;
+    background-color: #e63946;
+    padding: 8px;
+    border-radius: 4px;
+    transition: transform .2s ease-in-out;
+    cursor: pointer;
+    box-shadow: 0 0 10px 4px #0003;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    & > i {
+        margin-right: 8px;
+    }
+}
