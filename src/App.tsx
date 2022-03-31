@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import LoaderScreen from './components/loader-screen/LoaderScreen';
-import ProvideRepoScreen from './components/provide-repo/ProvideRepoScreen';
+import LoaderScreen from './screens/loading-screen/LoaderScreen';
+import ProvideRepoScreen from './screens/provide-repo/ProvideRepoScreen';
 import { PullRequestContext } from './contexts/PullRequestsContext';
-import PullRequestsList from './pages/pull-requests-list/PullRequestsList';
+import PullRequestsList from './screens/pull-requests-list/PullRequestsList';
 import './App.scss';
 
 function App() {

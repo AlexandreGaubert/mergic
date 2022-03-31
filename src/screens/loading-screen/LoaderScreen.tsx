@@ -1,5 +1,5 @@
 import React from 'react'
-import DotsLoadingIndicator from './dots-loading-indicator/DotsLoadingIndicator'
+import DotsLoadingIndicator from '../../components/dots-loading-indicator/DotsLoadingIndicator'
 import './styles.scss'
 
 export default function LoaderScreen() {
