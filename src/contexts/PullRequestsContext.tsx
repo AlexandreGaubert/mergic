@@ -44,18 +44,13 @@ export default function PullRequestContextProvider({ children }: Props) {
     const getPullRequestsList = useCallback(async () => {
         setLoading(true);
 
+
         try {
             const prlist = await fetchPullRequestsList(repoOwner, repoName);
-
             setPullRequests(prlist);
         } catch (error) {
-            /**
-             * Nice error handling, display nice and informative message to the user, so he can have a good hint on what happened
-             * and how to report the problem.
-             * 
-             * We can also use a middleware to do all the fetching and error handling, so this catch won't be necessary as 
-             * the error would already be handled in the middleware.
-             */
+            setRepoName('');
+            setRepoOwner('');
         }
 
         setLoading(false);

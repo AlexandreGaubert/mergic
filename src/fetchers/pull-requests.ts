@@ -9,9 +9,16 @@ export async function fetchPullRequestsList(repoOwner: string, repoName: string)
         return response.data;
     } catch (error) {
         alert('There was a problem while fetching pull requests, please verify your repo link. If your repo is private, this app won\'t have access to it')
+        /**
+         * We can implement a nicer error handling, displaying nice and informative message to the user, so he can have a good hint on what happened
+         * and how to report the problem. This will require more backend logic, so the frontend know what happened
+         * 
+         * We can also use a middleware to do all the fetching and error handling, so this catch won't be necessary as 
+         * the error would already be handled nicely in the middleware.
+         */
+        throw error;
+        /** We rethrow the error so we can reset the repoUrl, as it seems to have a problem with the PR fetching */
     }
-
-    return [];
 }
 
 export async function repoExists(
