@@ -55,7 +55,8 @@ export async function getNextPullRequest(pullRequests: PullRequest[]): Promise<P
             return null
 
     } catch (error) {
-        alert('There was a problem while fetching pull requests, please verify your repo link. If your repo is private, this app won\'t have access to it')
-        return null;
+        alert("An error happened while getting your next pull request to review.")
     }
+
+    return null;
 }
