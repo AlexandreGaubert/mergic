@@ -14,16 +14,27 @@ export async function fetchPullRequestsList(repoOwner: string, repoName: string)
     return [];
 }
 
-export async function repoExists(repoOwner: string, repoName: string): Promise<boolean> {
+export async function repoExists(
+    repoOwner: string,
+    repoName: string,
+    onSuccess: (owner: string, repoName: string) => void
+): Promise<boolean> {
     try {
-        /** Fetching 100 pull requests by default, a smart pagination system should be implemented */
-        const response = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/pulls?per_page=100`);
+        const res = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}`);
 
-        return response.status === 200;
-    } catch (error) {
-        alert('There was a problem while fetching pull requests, please verify your repo link. If your repo is private, this app won\'t have access to it')
-        return false;
+        if (res.status === 200) {
+            /** Le repo existe, on fetch les pull request et on affiche la liste */
+            onSuccess(repoOwner, repoName);
+            return true;
+        }
+    } catch (error: any) {
+        if (error.response.status === 404)
+            alert("This repo doesn't exists, maybe you misspelled it or it's in private mode.")
+        else
+            alert("There was a problem attempting to resolve your request.")
     }
+
+    return false;
 }
 
 export async function getNextPullRequest(pullRequests: PullRequest[]): Promise<PullRequest | null> {
