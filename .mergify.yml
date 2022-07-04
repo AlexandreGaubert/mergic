@@ -1,6 +1,15 @@
 queue_rules:
+  - name: urgent
+    conditions: []
+
   - name: default
-    conditions: []  # no extra conditions needed to get merged
+    conditions: []
+    
+  - name: main
+    conditions: []
+    
+  - name: bugfix
+    conditions: []
 
 pull_request_rules:
   - name: Automatic merge on approval
