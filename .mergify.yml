@@ -1,0 +1,20 @@
+queue_rules:
+  - name: urgent
+    conditions: []
+
+  - name: default
+    conditions: []
+    
+  - name: main
+    conditions: []
+    
+  - name: bugfix
+    conditions: []
+
+pull_request_rules:
+  - name: Automatic merge on approval
+    conditions:
+      - "#approved-reviews-by>=1"
+    actions:
+      queue:
+        name: default
