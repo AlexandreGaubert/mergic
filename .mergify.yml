@@ -47,7 +47,7 @@ pull_request_rules:
 
   - name: Armageddon
     conditions:
-      - base=main
+      - base=master
       - label=armageddon
     actions:
       label:
