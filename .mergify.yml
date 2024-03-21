@@ -1,27 +1,45 @@
-pull_request_rules:
-  - name: Request review from team
-    description: Request review from a specific team when checks are green.
-    conditions:
-      - '-closed'
-      - '#approved-reviews-by=0'
-      - '#changes-requested-reviews-by=0'
-      - review-requested!=AlexandreGaubert
-    actions:
-      request_reviews:
-        users:
-          - AlexandreGaubert
-  - name: Notify when a PR is removed from the queue
-    description: >-
-      Notify the PR author when its pull request is removed from the merge
-      queue.
-    conditions:
-      - queue-dequeue-reason != pr-queued-twice
-      - queue-dequeue-reason != pr-merged
-    actions:
-      comment:
-        message: >
-          Hey @{{author}}, your pull request has been dequeued due to the
-          following reason: {{queue_dequeue_reason}}.
+defaults:
+  actions:
+    queue:
+      name: default
+      method: squash
+      commit_message_template: |
+        {{title}} (#{{number}})
 
-          Sorry about that, but you can requeue the PR by using `@mergifyio
-          requeue` if you think this was a mistake.
+        {{body}}
+
+queue_rules:
+  - name: hotfix
+    conditions:
+        - check-success=test
+    speculative_checks: 5
+
+  - name: default
+    allow_inplace_checks: true
+    conditions:
+      - check-success=test
+      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
+    speculative_checks: 5
+
+  - name: lowprio
+    allow_inplace_checks: true
+    conditions:
+      - check-success=test
+      - schedule=Mon-Fri 09:30-17:00[Europe/Paris]
+    speculative_checks: 3
+    batch_size: 5
+
+pull_request_rules:
+  - name: automatic merge for hotfix
+    conditions:
+      - label=hotfix
+    actions:
+      queue:
+        name: hotfix
+        
+  - name: automatic merge
+    conditions:
+      - label=autoqueue
+    actions:
+      queue:
+        name: default
