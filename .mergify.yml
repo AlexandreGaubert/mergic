@@ -1,28 +1,46 @@
+extends: .github
+defaults:
+  actions:
+    queue:
+      name: default
+      method: squash
+      commit_message_template: |
+        {{title}} (#{{number}})
+
+        {{body}}
+
+queue_rules:
+  - name: hotfix
+    conditions:
+        - check-success=test
+    speculative_checks: 5
+
+  - name: default
+    allow_inplace_checks: true
+    conditions:
+      - check-success=test
+      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
+    speculative_checks: 5
+
+  - name: lowprio
+    allow_inplace_checks: true
+    conditions:
+      - check-success=test
+      - schedule=Mon-Fri 09:30-17:00[Europe/Paris]
+    speculative_checks: 3
+    batch_size: 5
+
 pull_request_rules:
-  - name: Assign t-shirt size to PR
-    description: >-
-      Assign a t-shirt size label to a pull request based on the number of lines
-      changed.
+  - name: automatic merge for hotfix
     conditions:
-      - '#modified-lines >= 100'
-      - '#modified-lines < 500'
+      - label=hotfix
     actions:
-      label:
-        toggle:
-          - size/L
-  - name: Automatic merge
-    description: Merge when PR passes all branch protection and has label automerge
+      queue:
+        name: hotfix
+        
+  - name: automatic merge
     conditions:
-      - label = automerge
+      - label=autoqueue
     actions:
-      merge: 
-  - name: Ping PR author when conflicting
-    description: Warn the pull request author when their PR are conflicting
-    conditions:
-      - conflict
-      - '-closed'
-    actions:
-      comment:
-        message: >
-          👋 {{author}} your PR is conflicting and needs to be updated to be
-          merged
+      queue:
+        name: default
