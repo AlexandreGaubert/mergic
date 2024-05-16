@@ -2,9 +2,9 @@ queue_rules:
   - name: hotfix
     queue_branch_prefix: mergify/merge-queue/
     queue_conditions:
-      - base=blabla
+      - base=LTS/base-truc
     merge_conditions:
-      - label=blabla
+      - label=LTS/base-truc
       - check-success=kjlkjlkj
     speculative_checks: 1
   - name: master
