@@ -1,3 +1,12 @@
+queue_rules:
+  - name: hotfix
+    queue_branch_prefix: mergify/merge-queue/
+    queue_conditions:
+      - base=blabla
+    merge_conditions:
+      - label=blabla
+    speculative_checks: 1
+
 pull_request_rules:
   - name: Assign t-shirt size to PR
     description: >-
