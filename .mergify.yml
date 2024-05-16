@@ -5,6 +5,9 @@ queue_rules:
       - base=blabla
     merge_conditions:
       - label=blabla
+      - check-success=test
+      - check-success=blabla
+      - check-success=qsdqsd
     speculative_checks: 1
 
 pull_request_rules:
