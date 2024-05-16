@@ -7,6 +7,14 @@ queue_rules:
       - label=blabla
       - check-success=kjlkjlkj
     speculative_checks: 1
+  - name: master
+    queue_branch_prefix: mergify/merge-queue/
+    queue_conditions:
+      - base=master
+    merge_conditions:
+      - label=master
+      - check-success=kjlkjlkj
+    speculative_checks: 1
 
 pull_request_rules:
   - name: Assign t-shirt size to PR
