@@ -1,3 +1,9 @@
+priority_rules:
+  - name: extended
+    priority: high
+    conditions:
+      - base = main
+
 queue_rules:
   - name: hotfix
     queue_branch_prefix: mergify/merge-queue/
