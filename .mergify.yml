@@ -3,7 +3,6 @@ priority_rules:
     priority: high
     conditions:
       - base = main
-
 queue_rules:
   - name: hotfix
     queue_branch_prefix: mergify/merge-queue/
@@ -21,15 +20,20 @@ queue_rules:
       - label=master
       - check-success=kjlkjlkj
     speculative_checks: 1
-
 pull_request_rules:
-  - name: Assign t-shirt size to PR
-    description: >-
-      Assign a t-shirt size label to a pull request based on the number of lines
-      changed.
+  - name: Notify when a PR is removed from the queue
+    description: Notify the PR author when its pull request is removed from the merge queue.
     conditions:
-      - '#modified-lines >= 100'
-      - '#modified-lines < 500'
+      - queue-dequeue-reason != none
+      - queue-dequeue-reason != pr-merged
+    actions:
+      queue:
+  - name: Assign t-shirt size to PR
+    description: Assign a t-shirt size label to a pull request based on the number
+      of lines changed.
+    conditions:
+      - "#modified-lines >= 100"
+      - "#modified-lines < 500"
     actions:
       label:
         toggle:
@@ -39,12 +43,12 @@ pull_request_rules:
     conditions:
       - label = automerge
     actions:
-      merge: 
+      merge:
   - name: Ping PR author when conflicting
     description: Warn the pull request author when their PR are conflicting
     conditions:
       - conflict
-      - '-closed'
+      - -closed
     actions:
       comment:
         message: >
