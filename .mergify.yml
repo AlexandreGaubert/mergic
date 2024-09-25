@@ -1,8 +1,9 @@
 priority_rules:
-  - name: extended
-    priority: high
+  - name: extendedqd
+    priority: medium
     conditions:
       - base = main
+    allow_checks_interruption: true
 queue_rules:
   - name: hotfix
     queue_branch_prefix: mergify/merge-queue/
