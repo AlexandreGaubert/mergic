@@ -55,3 +55,9 @@ pull_request_rules:
         message: >
           👋 {{author}} your PR is conflicting and needs to be updated to be
           merged
+merge_protections:
+  - name: "qsdqsd
+    if:
+      - base=main
+    success_conditions:
+      - added-files=files
