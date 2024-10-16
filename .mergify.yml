@@ -22,7 +22,7 @@ queue_rules:
       - check-success=kjlkjlkj
     speculative_checks: 1
 pull_request_rules:
-  - name: "Notify when a PR is removed from the queue"
+  - name: Notify when a PR is removed from the queue
     description: Notify the PR author when its pull request is removed from the merge queue.
     conditions:
       - queue-dequeue-reason != none
@@ -56,8 +56,12 @@ pull_request_rules:
           👋 {{author}} your PR is conflicting and needs to be updated to be
           merged
 merge_protections:
-  - name: "qsdqsd"
+  - name: qsdqsd
     if:
       - base=main
     success_conditions:
       - added-files=files
+commands_restrictions:
+  backport:
+    conditions:
+      - sender-permission >= writesd
