@@ -64,4 +64,4 @@ merge_protections:
 commands_restrictions:
   backport:
     conditions:
-      - sender-permission >= writesd
+      - sender-permission >= write
