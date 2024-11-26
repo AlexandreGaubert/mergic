@@ -12,7 +12,6 @@ queue_rules:
     merge_conditions:
       - label=LTS/base-truc
       - check-success=kjlkjlkj
-    speculative_checks: 1
   - name: master
     queue_branch_prefix: mergify/merge-queue/
     queue_conditions:
@@ -20,10 +19,10 @@ queue_rules:
     merge_conditions:
       - label=master
       - check-success=kjlkjlkj
-    speculative_checks: 1
 pull_request_rules:
   - name: Notify when a PR is removed from the queue
-    description: Notify the PR author when its pull request is removed from the merge queue.
+    description: Notify the PR author when its pull request is removed from the merge
+      queue.
     conditions:
       - queue-dequeue-reason != none
       - queue-dequeue-reason != pr-merged
@@ -73,3 +72,6 @@ commands_restrictions:
   backport:
     conditions:
       - sender-permission >= write
+
+merge_queue:
+  max_parallel_checks: 1
