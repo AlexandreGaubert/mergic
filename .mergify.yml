@@ -61,6 +61,14 @@ merge_protections:
       - base=main
     success_conditions:
       - added-files=files
+  - name: Only merge with validation label
+    description: Make sure PR has a validation label
+    if:
+      - base = main
+    success_conditions:
+      - or:
+          - label = Validation needed
+          - label = Validation done
 commands_restrictions:
   backport:
     conditions:
