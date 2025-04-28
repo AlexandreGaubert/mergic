@@ -1,0 +1,5 @@
+queue_rules:
+  - name: qsdqsd
+    queue_conditions:
+      - and:
+          - check-success = continuous-integration/travis-ci
