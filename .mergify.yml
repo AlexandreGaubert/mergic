@@ -1,6 +1,1 @@
-queue_rules:
-  - name: qsdqsd
-    queue_conditions: []
-    merge_conditions:
-      - and:
-          - check-success = continuous-integration/travis-ci
+queue_rules: []
