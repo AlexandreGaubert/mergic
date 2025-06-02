@@ -1,6 +1,8 @@
 queue_rules:
   - name: qsdqsd
     queue_conditions: []
+    batch_size: 2
+    batch_max_wait_time: "5 minutes"
     merge_conditions:
       - and:
           - check-success = continuous-integration/travis-ci
