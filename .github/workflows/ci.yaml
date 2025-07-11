@@ -1,0 +1,36 @@
+name: Placeholder CI
+on: 
+  pull_request:
+jobs:
+  placeholder_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: echo "Running tests..."
+
+      - name: Sleep for 30 minutes
+        run: sleep 1800
+
+      - name: Final step
+        run: echo "Final step after sleep"
+  
+  placeholder_job_2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run additional tests
+        run: echo "Running additional tests..."
+
+  placeholder_job_3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run more tests
+        run: echo "Running more tests..."

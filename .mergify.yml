@@ -6,3 +6,6 @@ queue_rules:
     merge_conditions:
       - and:
           - check-success = continuous-integration/travis-ci
+          - check-success = placeholder_job
+          - check-success = placeholder_job2
+          - check-success = placeholder_job3
