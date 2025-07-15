@@ -5,7 +5,6 @@ queue_rules:
     batch_max_wait_time: "5 minutes"
     merge_conditions:
       - and:
-          - check-success = continuous-integration/travis-ci
           - check-success = placeholder_job
-          - check-success = placeholder_job2
-          - check-success = placeholder_job3
+          - check-success = placeholder_job_2
+          - check-success = placeholder_job_3
