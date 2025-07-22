@@ -11,8 +11,8 @@ jobs:
       - name: Run tests
         run: echo "Running tests..."
 
-      - name: Sleep for 5 minutes
-        run: sleep 300
+      - name: Sleep for 30 minutes
+        run: sleep 1800
 
       - name: Final step
         run: echo "Final step after sleep"
