@@ -6,3 +6,11 @@ queue_rules:
     batch_max_wait_time: "30 seconds"
     merge_conditions:
       - check-success = test
+
+pull_request_rules:
+  - name: automatic merge
+    conditions:
+      - base=main
+      - label!=manual merge
+    actions:
+      queue:
