@@ -24,3 +24,10 @@ jobs:
     
     - name: Run tests
       run: npm test
+
+    - name: Mergify CI Upload
+      if: success() || failure()
+      uses: mergifyio/gha-mergify-ci@v6
+      with:
+        token: ${{ secrets.MERGIFY_TOKEN }}
+        report_path: test-reports/junit.xml
