@@ -2,6 +2,7 @@ queue_rules:
   - name: Run tests on main branch
     queue_conditions:
       - check-success = test
+      - check-success = lint
     batch_size: 2
     batch_max_wait_time: "30 seconds"
     merge_conditions:
