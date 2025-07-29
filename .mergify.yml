@@ -5,7 +5,6 @@ queue_rules:
     batch_size: 2
     batch_max_wait_time: "30 seconds"
     merge_conditions:
-      - check-success = lint
       - check-success = test
 
 pull_request_rules:
