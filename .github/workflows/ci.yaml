@@ -27,7 +27,7 @@ jobs:
 
     - name: Mergify CI Upload
       if: success() || failure()
-      uses: mergifyio/gha-mergify-ci@v6
+      uses: mergifyio/gha-mergify-ci@v7
       with:
         token: ${{ secrets.MERGIFY_TOKEN }}
         report_path: test-reports/junit.xml
