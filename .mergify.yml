@@ -8,6 +8,17 @@ queue_rules:
       - check-success = lint
       - check-success = test
 
+partition_rules:
+  - name: frontend
+    fallback_partition: false
+    conditions:
+      - files ~= frontend
+
+  - name: backend
+    fallback_partition: false
+    conditions:
+      - files ~= backend
+
 pull_request_rules:
   - name: automatic merge
     conditions:
