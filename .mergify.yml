@@ -2,11 +2,13 @@ queue_rules:
   - name: Run tests on main branch
     queue_conditions:
       - check-success = test
+      - commits[0].committer = trucmuche
     batch_size: 2
     batch_max_wait_time: "30 seconds"
     merge_conditions:
       - check-success = lint
       - check-success = test
+      
 
 partition_rules:
   - name: frontend
