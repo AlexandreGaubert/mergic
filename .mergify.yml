@@ -4,22 +4,19 @@ queue_rules:
       - check-success = test
       - -label=noqueue
     batch_size: 2
-    batch_max_wait_time: "30 seconds"
+    batch_max_wait_time: 30 seconds
     merge_conditions:
       - check-success = lint
       - check-success = test
-
 partition_rules:
   - name: frontend
     fallback_partition: false
     conditions:
       - files ~= frontend
-
   - name: backend
     fallback_partition: false
     conditions:
       - files ~= backend
-
 pull_request_rules:
   - name: automatic merge
     conditions:
@@ -27,3 +24,5 @@ pull_request_rules:
       - label!=manual merge
     actions:
       queue:
+merge_queue:
+  dequeued_label: dequeuedqsd
