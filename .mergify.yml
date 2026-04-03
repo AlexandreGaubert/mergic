@@ -1,3 +1,6 @@
+merge_queue:
+  mode: parallel
+
 queue_rules:
   - name: Run tests on main branch
     queue_conditions:
@@ -9,17 +12,6 @@ queue_rules:
       - check-success = lint
       - check-success = test
 
-partition_rules:
-  - name: frontend
-    fallback_partition: false
-    conditions:
-      - files ~= frontend
-
-  - name: backend
-    fallback_partition: false
-    conditions:
-      - files ~= backend
-
 pull_request_rules:
   - name: automatic merge
     conditions:
@@ -27,3 +19,11 @@ pull_request_rules:
       - label!=manual merge
     actions:
       queue:
+
+scopes:
+  merge_queue_scope: merge-queue
+  source: 
+    files:
+      frontend:
+        include: 
+          - blabla
