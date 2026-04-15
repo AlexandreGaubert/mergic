@@ -22,8 +22,17 @@ pull_request_rules:
 
 scopes:
   merge_queue_scope: merge-queue
-  source: 
+  source:
     files:
       frontend:
-        include: 
+        include:
           - blabla
+
+# Invalid on purpose to test MRGFY-6935 (dashboard should render AlertInvalidConfig).
+merge_protections:
+  - name: Broken rule (unknown field)
+    this_field_does_not_exist: true
+    if:
+      - base = main
+    success_conditions:
+      - check-success = test
