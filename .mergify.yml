@@ -1,38 +1,32 @@
 merge_queue:
   mode: parallel
-
 queue_rules:
-  - name: Run tests on main branch
-    queue_conditions:
-      - check-success = test
-      - -label=noqueue
-    batch_size: 2
-    batch_max_wait_time: "30 seconds"
-    merge_conditions:
-      - check-success = lint
-      - check-success = test
-
+- name: Run tests on main branch
+  queue_conditions:
+  - check-success = test
+  - -label=noqueue
+  batch_size: 2
+  batch_max_wait_time: 30 seconds
+  merge_conditions:
+  - check-success = lint
+  - check-success = test
 pull_request_rules:
-  - name: automatic merge
-    conditions:
-      - base=main
-      - label!=manual merge
-    actions:
-      queue:
-
+- name: automatic merge
+  conditions:
+  - base=main
+  - label!=manual merge
+  actions:
+    queue: null
 scopes:
   merge_queue_scope: merge-queue
   source:
     files:
       frontend:
         include:
-          - blabla
-
-# Invalid on purpose to test MRGFY-6935 (dashboard should render AlertInvalidConfig).
+        - blabla
 merge_protections:
-  - name: Broken rule (unknown field)
-    this_field_does_not_exist: true
-    if:
-      - base = main
-    success_conditions:
-      - check-success = test
+- name: Broken rule (unknown field)
+  if:
+  - base = main
+  success_conditions:
+  - check-success = test
