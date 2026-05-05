@@ -1,38 +1,81 @@
-merge_queue:
-  mode: parallel
+# .mergify.yml — Mergify configuration for the team-foo monorepo
+# Last reviewed: 2026-Q1 by @lead-dev
+#
+# Rules of engagement:
+#   - All PRs go through the merge queue; no direct pushes to main.
+#   - We bias toward fast feedback: small batches, short waits.
+#   - Hotfixes bypass the standard queue via the `hotfix` label.
+#
+# Reference: https://docs.mergify.com/configuration/file-format/
+
+# Shared anchor — keep CI gates DRY across queue + merge_protections.
+_required_ci: &required_ci
+  - check-success = build
+  - check-success = unit-tests
+  - check-success = integration-tests
 
 queue_rules:
-  - name: Run tests on main branch
+  # Default queue — covers ~95% of PRs.
+  - name: default
     queue_conditions:
-      - check-success = test
-      - -label=noqueue
-    batch_size: 2
-    batch_max_wait_time: "30 seconds"
-    merge_conditions:
-      - check-success = lint
-      - check-success = test
+      - check-success = build
+      - check-success = unit-tests
+      - "#approved-reviews-by >= 1"
+      - "-label=do-not-merge"
+    # Larger batches cost more CI but ship faster on average.
+    batch_size: 3
+    # Wait briefly to coalesce concurrent PRs into one batch.
+    batch_max_wait_time: 30        # ← BUG #1: int instead of duration string ("30 seconds")
+    merge_conditions: *required_ci
 
+  # Hotfix queue — bypasses the standard merge gate.
+  - name: hotfix
+    queue_conditions:
+      - label = hotfix
+      - check-success = build
+    batch_size: 1
+    speculative_checks: 1
+    merge_conditons:                # ← BUG #2: typo, missing 'i' in "conditions"
+      - check-success = unit-tests
+
+# Pull request rules — automation that runs on every PR event.
 pull_request_rules:
-  - name: automatic merge
+  # Auto-queue eligible PRs targeting main.
+  - name: automatic merge for main
     conditions:
-      - base=main
-      - label!=manual merge
+      - base = main
+      - "-label=manual-merge"
+      - "-draft"
     actions:
       queue:
+        name: default
 
-scopes:
-  merge_queue_scope: merge-queue
-  source:
-    files:
-      frontend:
-        include:
-          - blabla
+  # Block PRs that lack a Linear ticket reference.
+  - name: require Linear ticket in body
+    conditions:
+      - "-body~=(MRGFY-|FOO-)\\d+"
+      - "-author=dependabot[bot]"
+    actions:
+      comment:
+        message: |
+          Please add a Linear ticket reference (`MRGFY-XXX` or `FOO-XXX`)
+          to the PR body before merging.
+          See: https://wiki.team-foo.dev/eng/linear
 
-# Invalid on purpose to test MRGFY-6935 (dashboard should render AlertInvalidConfig).
+  # Auto-rebase when the PR falls behind main.
+  - name: rebase outdated PRs
+    conditions:
+      - "#commits-behind > 0"
+      - "-conflict"
+      - "-draft"
+    actions:
+      rebase:
+        bot_account: mergify-bot
+
+# Merge protections — branch-level invariants enforced at queue time.
 merge_protections:
-  - name: Broken rule (unknown field)
-    this_field_does_not_exist: true
+  - name: Required CI on main
     if:
       - base = main
-    success_conditions:
-      - check-success = test
+    success_conditions: *required_ci
+    success_treshold: 100           # ← BUG #3: typo "treshold" + extra key not allowed on this rule
