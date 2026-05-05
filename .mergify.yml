@@ -34,8 +34,7 @@ queue_rules:
       - label = hotfix
       - check-success = build
     batch_size: 1
-    speculative_checks: 1
-    merge_conditons:
+    merge_conditions:
       - check-success = unit-tests
 
 # Pull request rules — automation that runs on every PR event.
@@ -78,4 +77,3 @@ merge_protections:
     if:
       - base = main
     success_conditions: *required_ci
-    success_treshold: 100
