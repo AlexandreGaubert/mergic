@@ -25,7 +25,7 @@ queue_rules:
     # Larger batches cost more CI but ship faster on average.
     batch_size: 3
     # Wait briefly to coalesce concurrent PRs into one batch.
-    batch_max_wait_time: 30        # ← BUG #1: int instead of duration string ("30 seconds")
+    batch_max_wait_time: "30 seconds"        # ← BUG #1: int instead of duration string ("30 seconds")
     merge_conditions: *required_ci
 
   # Hotfix queue — bypasses the standard merge gate.
@@ -34,8 +34,7 @@ queue_rules:
       - label = hotfix
       - check-success = build
     batch_size: 1
-    speculative_checks: 1
-    merge_conditons:                # ← BUG #2: typo, missing 'i' in "conditions"
+    merge_conditions:                # ← BUG #2: typo, missing 'i' in "conditions"
       - check-success = unit-tests
 
 # Pull request rules — automation that runs on every PR event.
@@ -78,4 +77,3 @@ merge_protections:
     if:
       - base = main
     success_conditions: *required_ci
-    success_treshold: 100           # ← BUG #3: typo "treshold" + extra key not allowed on this rule
