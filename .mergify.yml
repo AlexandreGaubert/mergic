@@ -1,81 +1,61 @@
-# .mergify.yml — Mergify configuration for the team-foo monorepo
-# Last reviewed: 2026-Q1 by @lead-dev
+# .mergify.yml — Production rules for the team-foo monorepo
+# Owners: @platform-team
+# Last reviewed: 2026-Q1
 #
-# Rules of engagement:
-#   - All PRs go through the merge queue; no direct pushes to main.
-#   - We bias toward fast feedback: small batches, short waits.
-#   - Hotfixes bypass the standard queue via the `hotfix` label.
-#
-# Reference: https://docs.mergify.com/configuration/file-format/
+# Conventions:
+#   - Two queues: `default` (most PRs) and `critical` (hotfixes, security).
+#   - Auto-merge for non-draft PRs targeting main with required reviews.
+#   - Merge protections enforce CI + review minima at queue time.
 
-# Shared anchor — keep CI gates DRY across queue + merge_protections.
+# Shared CI gates — keep DRY across queue rules + merge_protections.
 _required_ci: &required_ci
   - check-success = build
   - check-success = unit-tests
   - check-success = integration-tests
 
 queue_rules:
-  # Default queue — covers ~95% of PRs.
   - name: default
     queue_conditions:
       - check-success = build
-      - check-success = unit-tests
-      - "#approved-reviews-by >= 1"
-      - "-label=do-not-merge"
-    # Larger batches cost more CI but ship faster on average.
-    batch_size: 3
-    # Wait briefly to coalesce concurrent PRs into one batch.
-    batch_max_wait_time: 30
+      - "approved-reviews-by >= 1"
     merge_conditions: *required_ci
 
-  # Hotfix queue — bypasses the standard merge gate.
-  - name: hotfix
+  - name: critical
     queue_conditions:
-      - label = hotfix
+      - label = critical
       - check-success = build
-    batch_size: 1
-    speculative_checks: 1
-    merge_conditons:
-      - check-success = unit-tests
+    # Older config style migrated from pre-merge_conditions era.
+    conditions:
+      - check-success = test
+      - check-success = security-scan
+    merge_conditions:
+      - check-success = test
+      - check-success = security-scan
 
-# Pull request rules — automation that runs on every PR event.
 pull_request_rules:
-  # Auto-queue eligible PRs targeting main.
   - name: automatic merge for main
     conditions:
       - base = main
-      - "-label=manual-merge"
       - "-draft"
+      - "-label=manual-merge"
     actions:
       queue:
         name: default
+        method: squash-merge
 
-  # Block PRs that lack a Linear ticket reference.
-  - name: require Linear ticket in body
+  - name: notify on-call when CI breaks
     conditions:
-      - "-body~=(MRGFY-|FOO-)\\d+"
-      - "-author=dependabot[bot]"
+      - check-failure = unit-tests
+      - "-conflict"
     actions:
       comment:
-        message: |
-          Please add a Linear ticket reference (`MRGFY-XXX` or `FOO-XXX`)
-          to the PR body before merging.
-          See: https://wiki.team-foo.dev/eng/linear
+        message: >
+          Hey, the unit tests are failing on this PR.
+          Pinging @on-call for a look.
 
-  # Auto-rebase when the PR falls behind main.
-  - name: rebase outdated PRs
-    conditions:
-      - "#commits-behind > 0"
-      - "-conflict"
-      - "-draft"
-    actions:
-      rebase:
-        bot_account: mergify-bot
-
-# Merge protections — branch-level invariants enforced at queue time.
 merge_protections:
-  - name: Required CI on main
+  - name: prod CI gate
     if:
       - base = main
     success_conditions: *required_ci
-    success_treshold: 100
+    schedule: "weekdays 9 to 18"
