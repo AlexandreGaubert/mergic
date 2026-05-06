@@ -25,9 +25,6 @@ queue_rules:
       - label = critical
       - check-success = build
     # Older config style migrated from pre-merge_conditions era.
-    conditions:
-      - check-success = test
-      - check-success = security-scan
     merge_conditions:
       - check-success = test
       - check-success = security-scan
@@ -41,7 +38,7 @@ pull_request_rules:
     actions:
       queue:
         name: default
-        method: squash-merge
+        method: squash
 
   - name: notify on-call when CI breaks
     conditions:
@@ -58,4 +55,3 @@ merge_protections:
     if:
       - base = main
     success_conditions: *required_ci
-    schedule: "weekdays 9 to 18"
