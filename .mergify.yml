@@ -1,61 +1,9 @@
-# .mergify.yml — Production rules for the team-foo monorepo
-# Owners: @platform-team
-# Last reviewed: 2026-Q1
-#
-# Conventions:
-#   - Two queues: `default` (most PRs) and `critical` (hotfixes, security).
-#   - Auto-merge for non-draft PRs targeting main with required reviews.
-#   - Merge protections enforce CI + review minima at queue time.
-
-# Shared CI gates — keep DRY across queue rules + merge_protections.
-_required_ci: &required_ci
-  - check-success = build
-  - check-success = unit-tests
-  - check-success = integration-tests
-
+# Minimal config for dashboard merge-queue testing.
+# The queue waits on a check that never exists, so queued PRs stay
+# "checking" forever and never merge. Used to test the dashboard's
+# rendering of PRs queued across multiple base branches.
 queue_rules:
   - name: default
-    queue_conditions:
-      - check-success = build
-      - "approved-reviews-by >= 1"
-    merge_conditions: *required_ci
-
-  - name: critical
-    queue_conditions:
-      - label = critical
-      - check-success = build
-    # Older config style migrated from pre-merge_conditions era.
-    conditions:
-      - check-success = test
-      - check-success = security-scan
+    queue_conditions: []
     merge_conditions:
-      - check-success = test
-      - check-success = security-scan
-
-pull_request_rules:
-  - name: automatic merge for main
-    conditions:
-      - base = main
-      - "-draft"
-      - "-label=manual-merge"
-    actions:
-      queue:
-        name: default
-        method: squash-merge
-
-  - name: notify on-call when CI breaks
-    conditions:
-      - check-failure = unit-tests
-      - "-conflict"
-    actions:
-      comment:
-        message: >
-          Hey, the unit tests are failing on this PR.
-          Pinging @on-call for a look.
-
-merge_protections:
-  - name: prod CI gate
-    if:
-      - base = main
-    success_conditions: *required_ci
-    schedule: "weekdays 9 to 18"
+      - check-success = ci-that-never-runs
