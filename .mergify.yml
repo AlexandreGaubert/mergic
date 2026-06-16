@@ -7,3 +7,5 @@ queue_rules:
     queue_conditions: []
     merge_conditions:
       - check-success = ci-that-never-runs
+merge_protections_settings:
+  reporting_method: check-runs
