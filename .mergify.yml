@@ -7,3 +7,5 @@ queue_rules:
     queue_conditions: []
     merge_conditions:
       - check-success = ci-that-never-runs
+merge_queue:
+  skip_intermediate_results: true
