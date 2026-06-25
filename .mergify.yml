@@ -1,12 +1,9 @@
-# Mergic merge-queue test config (YAML-fidelity probe).
-merge_queue:
-  max_parallel_checks: 5
-  dequeued_label: 'dequeued' # keep these quotes + this comment
+# Minimal config for dashboard merge-queue testing.
+# The queue waits on a check that never exists, so queued PRs stay
+# "checking" forever and never merge. Used to test the dashboard's
+# rendering of PRs queued across multiple base branches.
 queue_rules:
-  # the only queue rule
   - name: default
-    queue_conditions: &conds
-      - base = main
+    queue_conditions: []
     merge_conditions:
       - check-success = ci-that-never-runs
-    batch_size: 2
