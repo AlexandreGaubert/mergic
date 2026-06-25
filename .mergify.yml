@@ -1,7 +1,7 @@
 # Mergic merge-queue test config (YAML-fidelity probe).
 merge_queue:
-  max_parallel_checks: 5
-  dequeued_label: 'dequeued' # keep these quotes + this comment
+  max_parallel_checks: 8
+  dequeued_label: dequeued
 queue_rules:
   # the only queue rule
   - name: default
